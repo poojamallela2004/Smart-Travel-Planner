@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Travel Planner</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(to right, #0099cc, #66ccff);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      background-color: #004080;
+      color: white;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 30px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+
+    .form-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    input, textarea, button {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      background-color: #004080;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #0059b3;
+    }
+
+    .trip-list {
+      margin-top: 25px;
+    }
+
+    .trip-card {
+      background-color: #f9f9f9;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-left: 5px solid #004080;
+      border-radius: 8px;
+    }
+
+    .trip-card h3 {
+      margin: 0 0 8px 0;
+      color: #004080;
+    }
+
+    .actions {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .actions button {
+      background-color: red;
+      padding: 8px 15px;
+    }
+
+    .summary {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #004080;
+      text-align: right;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      color: white;
+      background-color: #004080;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Smart Travel Planner</h1>
+    <p>Plan your next adventure easily ✈️</p>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <input type="text" id="destination" placeholder="Destination" required>
+      <input type="date" id="startDate" required>
+      <input type="date" id="endDate" required>
+      <input type="number" id="budget" placeholder="Budget (₹)" required>
+      <textarea id="notes" rows="2" placeholder="Additional notes..."></textarea>
+      <button onclick="addTrip()">Add Trip</button>
+    </section>
+
+    <div class="trip-list" id="tripList"></div>
+
+    <div class="summary" id="summary"></div>
+  </main>
+
+  <footer>
+    <p>© 2025 Smart Travel Planner | Designed by Pooja ✨</p>
+  </footer>
+
+  <script>
+    let trips = JSON.parse(localStorage.getItem("trips")) || [];
+
+    function addTrip() {
+      const destination = document.getElementById("destination").value.trim();
+      const startDate = document.getElementById("startDate").value;
+      const endDate = document.getElementById("endDate").value;
+      const budget = document.getElementById("budget").value;
+      const notes = document.getElementById("notes").value.trim();
+
+      if (!destination || !startDate || !endDate || !budget) {
+        alert("⚠️ Please fill in all required fields.");
+        return;
+      }
+
+      const trip = {
+        id: Date.now(),
+        destination,
+        startDate,
+        endDate,
+        budget: Number(budget),
+        notes
+      };
+
+      trips.push(trip);
+      localStorage.setItem("trips", JSON.stringify(trips));
+      displayTrips();
+
+      document.getElementById("destination").value = "";
+      document.getElementById("startDate").value = "";
+      document.getElementById("endDate").value = "";
+      document.getElementById("budget").value = "";
+      document.getElementById("notes").value = "";
+    }
+
+    function deleteTrip(id) {
+      if (confirm("Are you sure you want to remove this trip?")) {
+        trips = trips.filter(trip => trip.id !== id);
+        localStorage.setItem("trips", JSON.stringify(trips));
+        displayTrips();
+      }
+    }
+
+    function displayTrips() {
+      const list = document.getElementById("tripList");
+      list.innerHTML = "";
+
+      if (trips.length === 0) {
+        list.innerHTML = "<p>No trips planned yet. Start adding!</p>";
+        document.getElementById("summary").innerHTML = "";
+        return;
+      }
+
+      let totalBudget = 0;
+      trips.forEach(trip => {
+        totalBudget += trip.budget;
+
+        const div = document.createElement("div");
+        div.classList.add("trip-card");
+        div.innerHTML = `
+          <h3>${trip.destination}</h3>
+          <p><strong>Dates:</strong> ${trip.startDate} → ${trip.endDate}</p>
+          <p><strong>Budget:</strong> ₹${trip.budget}</p>
+          <p><strong>Notes:</strong> ${trip.notes || "—"}</p>
+          <div class="actions">
+            <button onclick="deleteTrip(${trip.id})">Delete</button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+
+      document.getElementById("summary").innerHTML = `💰 Total Estimated Budget: ₹${totalBudget}`;
+    }
+
+    // Load trips on startup
+    displayTrips();
+  </script>
+</body>
+</html>
