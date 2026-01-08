@@ -1,209 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Travel Planner</title>
-  <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(to right, #0099cc, #66ccff);
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Travel Planner</title>
 
-    header {
-      text-align: center;
-      background-color: #004080;
-      color: white;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
+<style>
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(to right, #0099cc, #66ccff);
+  margin: 0;
+  color: #333;
+}
 
-    h1 {
-      margin: 0;
-    }
+header {
+  text-align: center;
+  background-color: #004080;
+  color: white;
+  padding: 20px;
+}
 
-    main {
-      max-width: 800px;
-      margin: 30px auto;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-    }
+main {
+  max-width: 800px;
+  margin: 30px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
 
-    .form-section {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-    input, textarea, button {
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
+input, textarea, button {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
 
-    button {
-      background-color: #004080;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
+button {
+  background: #004080;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
 
-    button:hover {
-      background-color: #0059b3;
-    }
+button:hover {
+  background: #0059b3;
+}
 
-    .trip-list {
-      margin-top: 25px;
-    }
+.trip-card {
+  background: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 5px solid #004080;
+  border-radius: 8px;
+}
 
-    .trip-card {
-      background-color: #f9f9f9;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-left: 5px solid #004080;
-      border-radius: 8px;
-    }
+.trip-card h3 {
+  margin: 0 0 8px;
+  color: #004080;
+}
 
-    .trip-card h3 {
-      margin: 0 0 8px 0;
-      color: #004080;
-    }
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
 
-    .actions {
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-    }
+.actions button {
+  flex: 1;
+}
 
-    .actions button {
-      background-color: red;
-      padding: 8px 15px;
-    }
+.delete-btn {
+  background: red;
+}
 
-    .summary {
-      margin-top: 20px;
-      font-weight: bold;
-      color: #004080;
-      text-align: right;
-    }
+.summary {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #004080;
+  text-align: right;
+}
 
-    footer {
-      text-align: center;
-      padding: 15px;
-      color: white;
-      background-color: #004080;
-      margin-top: 40px;
-    }
-  </style>
+.clear-btn {
+  background: #ef4444;
+  margin-top: 10px;
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  background: #004080;
+  color: white;
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <h1>Smart Travel Planner</h1>
-    <p>Plan your next adventure easily ✈️</p>
-  </header>
 
-  <main>
-    <section class="form-section">
-      <input type="text" id="destination" placeholder="Destination" required>
-      <input type="date" id="startDate" required>
-      <input type="date" id="endDate" required>
-      <input type="number" id="budget" placeholder="Budget (₹)" required>
-      <textarea id="notes" rows="2" placeholder="Additional notes..."></textarea>
-      <button onclick="addTrip()">Add Trip</button>
-    </section>
+<header>
+  <h1>Smart Travel Planner</h1>
+  <p>Plan your next adventure easily ✈️</p>
+</header>
 
-    <div class="trip-list" id="tripList"></div>
+<main>
+  <section class="form-section">
+    <input type="text" id="destination" placeholder="Destination">
+    <input type="date" id="startDate">
+    <input type="date" id="endDate">
+    <input type="number" id="budget" placeholder="Budget (₹)">
+    <textarea id="notes" rows="2" placeholder="Additional notes..."></textarea>
+    <button onclick="saveTrip()">Save Trip</button>
+  </section>
 
-    <div class="summary" id="summary"></div>
-  </main>
+  <div id="tripList"></div>
 
-  <footer>
-    <p>© 2025 Smart Travel Planner | Designed by &#10084;&#65039; M.Pooja(Y22EC102).</p>
-  </footer>
+  <button class="clear-btn" onclick="clearAll()">Clear All Trips</button>
 
-  <script>
-    let trips = JSON.parse(localStorage.getItem("trips")) || [];
+  <div class="summary" id="summary"></div>
+</main>
 
-    function addTrip() {
-      const destination = document.getElementById("destination").value.trim();
-      const startDate = document.getElementById("startDate").value;
-      const endDate = document.getElementById("endDate").value;
-      const budget = document.getElementById("budget").value;
-      const notes = document.getElementById("notes").value.trim();
+<footer>
+  <p>© 2025 Smart Travel Planner | Designed by ❤️ Mallela Pooja</p>
+</footer>
 
-      if (!destination || !startDate || !endDate || !budget) {
-        alert("⚠️ Please fill in all required fields.");
-        return;
-      }
+<script>
+let trips = JSON.parse(localStorage.getItem("trips")) || [];
+let editId = null;
 
-      const trip = {
-        id: Date.now(),
-        destination,
-        startDate,
-        endDate,
-        budget: Number(budget),
-        notes
-      };
+function saveTrip() {
+  const destination = destinationInput.value.trim();
+  const startDate = startDateInput.value;
+  const endDate = endDateInput.value;
+  const budget = Number(budgetInput.value);
+  const notes = notesInput.value.trim();
 
-      trips.push(trip);
-      localStorage.setItem("trips", JSON.stringify(trips));
-      displayTrips();
+  if (!destination || !startDate || !endDate || !budget) {
+    alert("Please fill all required fields");
+    return;
+  }
 
-      document.getElementById("destination").value = "";
-      document.getElementById("startDate").value = "";
-      document.getElementById("endDate").value = "";
-      document.getElementById("budget").value = "";
-      document.getElementById("notes").value = "";
-    }
+  if (new Date(endDate) < new Date(startDate)) {
+    alert("End date cannot be before start date");
+    return;
+  }
 
-    function deleteTrip(id) {
-      if (confirm("Are you sure you want to remove this trip?")) {
-        trips = trips.filter(trip => trip.id !== id);
-        localStorage.setItem("trips", JSON.stringify(trips));
-        displayTrips();
-      }
-    }
+  if (budget <= 0) {
+    alert("Budget must be positive");
+    return;
+  }
 
-    function displayTrips() {
-      const list = document.getElementById("tripList");
-      list.innerHTML = "";
+  const tripData = {
+    id: editId ?? Date.now(),
+    destination,
+    startDate,
+    endDate,
+    budget,
+    notes
+  };
 
-      if (trips.length === 0) {
-        list.innerHTML = "<p>No trips planned yet. Start adding!</p>";
-        document.getElementById("summary").innerHTML = "";
-        return;
-      }
+  if (editId) {
+    trips = trips.map(t => t.id === editId ? tripData : t);
+    editId = null;
+  } else {
+    trips.push(tripData);
+  }
 
-      let totalBudget = 0;
-      trips.forEach(trip => {
-        totalBudget += trip.budget;
+  localStorage.setItem("trips", JSON.stringify(trips));
+  resetForm();
+  displayTrips();
+}
 
-        const div = document.createElement("div");
-        div.classList.add("trip-card");
-        div.innerHTML = `
-          <h3>${trip.destination}</h3>
-          <p><strong>Dates:</strong> ${trip.startDate} → ${trip.endDate}</p>
-          <p><strong>Budget:</strong> ₹${trip.budget}</p>
-          <p><strong>Notes:</strong> ${trip.notes || "—"}</p>
-          <div class="actions">
-            <button onclick="deleteTrip(${trip.id})">Delete</button>
-          </div>
-        `;
-        list.appendChild(div);
-      });
+function editTrip(id) {
+  const trip = trips.find(t => t.id === id);
+  destinationInput.value = trip.destination;
+  startDateInput.value = trip.startDate;
+  endDateInput.value = trip.endDate;
+  budgetInput.value = trip.budget;
+  notesInput.value = trip.notes;
+  editId = id;
+}
 
-      document.getElementById("summary").innerHTML = `💰 Total Estimated Budget: ₹${totalBudget}`;
-    }
-
-    // Load trips on startup
+function deleteTrip(id) {
+  if (confirm("Delete this trip?")) {
+    trips = trips.filter(t => t.id !== id);
+    localStorage.setItem("trips", JSON.stringify(trips));
     displayTrips();
-  </script>
+  }
+}
+
+function clearAll() {
+  if (confirm("Delete all trips?")) {
+    trips = [];
+    localStorage.clear();
+    displayTrips();
+  }
+}
+
+function displayTrips() {
+  tripList.innerHTML = "";
+
+  if (trips.length === 0) {
+    summary.innerHTML = "";
+    return;
+  }
+
+  trips.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+
+  let totalBudget = 0;
+
+  trips.forEach(trip => {
+    totalBudget += trip.budget;
+    const days =
+      (new Date(trip.endDate) - new Date(trip.startDate)) /
+      (1000 * 60 * 60 * 24) + 1;
+
+    tripList.innerHTML += `
+      <div class="trip-card">
+        <h3>${trip.destination}</h3>
+        <p><strong>Dates:</strong> ${trip.startDate} → ${trip.endDate}</p>
+        <p><strong>Duration:</strong> ${days} days</p>
+        <p><strong>Budget:</strong> ₹${trip.budget}</p>
+        <p><strong>Notes:</strong> ${trip.notes || "—"}</p>
+        <div class="actions">
+          <button onclick="editTrip(${trip.id})">Edit</button>
+          <button class="delete-btn" onclick="deleteTrip(${trip.id})">Delete</button>
+        </div>
+      </div>
+    `;
+  });
+
+  summary.innerHTML = `💰 Total Estimated Budget: ₹${totalBudget}`;
+}
+
+function resetForm() {
+  destinationInput.value = "";
+  startDateInput.value = "";
+  endDateInput.value = "";
+  budgetInput.value = "";
+  notesInput.value = "";
+}
+
+const destinationInput = document.getElementById("destination");
+const startDateInput = document.getElementById("startDate");
+const endDateInput = document.getElementById("endDate");
+const budgetInput = document.getElementById("budget");
+const notesInput = document.getElementById("notes");
+const tripList = document.getElementById("tripList");
+const summary = document.getElementById("summary");
+
+displayTrips();
+</script>
+
 </body>
 </html>
