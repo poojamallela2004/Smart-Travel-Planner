@@ -1,2 +1,25 @@
 # Smart-Travel-Planner
-Here’s a complete “Smart Travel Planner” web app built with HTML, CSS, and JavaScript — simple, elegant, and fully functional. It lets users add destinations, view trip details, estimate total cost, and clear their plan — all stored in the browser’s local storage.
+The Smart Travel Planner is a web-based application that helps users plan and manage their trips efficiently.
+Users can add trip details such as destination, travel dates, budget, and notes, and view all planned trips in a structured format.
+
+The application focuses on frontend fundamentals and uses browser localStorage to persist data.
+
+Features
+
+-Add multiple travel plans
+- Destination-based trip entries
+- Start and end date selection
+- Budget tracking with total estimation
+- Additional notes for each trip
+- Delete individual trips
+- Data persistence using localStorage
+- Responsive and modern UI
+- Technologies Used
+
+HTML5 – Structure and layout
+
+CSS3 – Styling, gradients, and responsive design
+
+JavaScript (ES6) – Logic, DOM manipulation, and event handling
+
+Browser localStorage – Client-side data persistence
